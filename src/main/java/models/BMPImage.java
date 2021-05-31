@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -17,7 +18,7 @@ public class BMPImage {
     private byte[] header;
     private byte[] body;
     private int width, height;
-    private List<List<String>> binaryImage = new ArrayList<>();
+    private List<List<Byte>> binaryImage = new ArrayList<>();
 
     public BMPImage(String path, int k) throws FileNotFoundException {
         File imageFile = FileUtils.parseFile(path);
@@ -29,23 +30,25 @@ public class BMPImage {
             if(height%2 != 0 || size%k != 0) throw new IOException("Invalid image or k.");
             int index = 0;
             for(int i = 0;i < height; i++){
-                List<String> aux = new ArrayList<>();
+                List<Byte> aux = new ArrayList<>();
                 for(int j = 0;j < width; j++) {
-                    aux.add(Binary.getBinary(image.getData().getDataBuffer().getElem(index++)));
+                    aux.add(new Integer(image.getData().getDataBuffer().getElem(index++)).byteValue());
+                    //aux.add(Binary.getBinary(image.getData().getDataBuffer().getElem(index++)));
                     //System.out.println(image.getData().getDataBuffer().getElem(i) + " - " + Binary.getBinary(image.getData().getDataBuffer().getElem(i)));
                 }
                 binaryImage.add(aux);
             }
+            Collections.reverse(binaryImage); //OVERKILL, SHOULD CHANGE THIS
         } catch (Exception e) {
             System.out.println("Error while reading file" + imageFile.getName());
         }
     }
 
-    public List<List<String>> getSquaredMatrix() {
-        List<List<String>> squaredMatrix = new ArrayList<>();
+    public List<List<Byte>> getSquaredMatrix() {
+        List<List<Byte>> squaredMatrix = new ArrayList<>();
         for(int i = 0;i < height; i += 2){
             for(int j = 0;j < width; j += 2) {
-                List<String> aux = new ArrayList<>();
+                List<Byte> aux = new ArrayList<>();
                 aux.add(binaryImage.get(i).get(j));
                 aux.add(binaryImage.get(i).get(j+1));
                 aux.add(binaryImage.get(i+1).get(j));
