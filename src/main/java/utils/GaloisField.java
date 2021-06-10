@@ -2,8 +2,12 @@ package utils;
 
 
 import java.util.BitSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GaloisField {
+    //TODO: Cambiar static
+    static Map<Integer, Integer> map = FileUtils.getMappingByte();
     public static Byte add(Byte b1, Byte b2){
         // convert to ints and xor
         int one = (int)b1;
@@ -28,9 +32,13 @@ public class GaloisField {
                     tmp = tmp ^ aux;
             }
         }
-        System.out.println(tmp);
-        System.out.println(tmp >>> generator);
-        System.out.println(tmp << 1);
+        for(int i =9 ;i>=0;i--){
+            if (((tmp >>> i) & 1) != 0) {
+                System.out.println(i + " is Set");
+            }
+        }
+        System.out.println("highestonebit: " + Integer.highestOneBit(tmp) + "  -  " + map.get(Integer.highestOneBit(tmp)));
+        System.out.println("Number: " + tmp);
         return (byte)tmp;
     }
 
