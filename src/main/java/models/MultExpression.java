@@ -17,8 +17,6 @@ public class MultExpression implements MathExpressions<Integer> {
     public int eval() {
         int resp = subFunction.get(0);
         for(int i = 1;i<subFunction.size();i++){
-            //TODO: Should i apply module here??? Or just a normal multiplication using galois field
-            //TODO: I think i should, i might have some overflow issues if not
             resp += GaloisField.moduleReducer(GaloisField.product(resp,subFunction.get(i)),355);
         }
         return resp;

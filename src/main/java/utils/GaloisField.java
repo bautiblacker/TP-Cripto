@@ -81,6 +81,7 @@ public class GaloisField {
             gradeDiff = (currentPx.size() - mx.size());
         }
 
+
         return Binary.getBinary(currentPx);
     }
 
