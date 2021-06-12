@@ -11,6 +11,6 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Config config = new Config(args);
         BMPImage bmpImage = new BMPImage(config.getSecretImage().getPath(), config.getK());
-        List<List<Byte>> squaredMatrix = bmpImage.getSquaredMatrix();
+        //List<List<Byte>> squaredMatrix = bmpImage.getSquaredMatrix();
     }
 }
