@@ -16,13 +16,13 @@ public class GaloisField {
         return (byte)(0xff & xor);
     }
 
-    public static Byte product(Byte b1, Byte b2, int generator){
-        String byte2 = Binary.getBinary(b2, 15);
+    public static int product(int b1, int b2){
+        String byte2 = Binary.getBinary(b2,15);
         int tmp = 0;
         boolean firstTime = true;
         for(int i = 0;i<byte2.length();i++){
             if(byte2.charAt(i) == '1') {
-                int aux = ((int)b1) << byte2.length()-i-1;
+                int aux = ((b1) << byte2.length()-i-1);
                 if(firstTime) {
                     tmp = aux;
                     firstTime = false;
@@ -30,24 +30,16 @@ public class GaloisField {
                     tmp = tmp ^ aux;
             }
         }
-        for(int i = 9 ;i >= 0;i--){
-            if (((tmp >>> i) & 1) != 0) {
-                System.out.println(i + " is Set");
-            }
-        }
-        System.out.println("highestonebit: " + Integer.highestOneBit(tmp) + "  -  " + map.get(Integer.highestOneBit(tmp)));
-        System.out.println("Number: " + tmp);
-        List<Integer> tmpList = mapToList(tmp);
-        List<Integer> generatorList = mapToList(generator);
-        return moduleReducer(tmpList, generatorList);
+        return tmp;
+    }
+
+    public static Byte product(int b1, int b2, int generator){
+        return moduleReducer(product(b1,b2), generator);
     }
 
     public static void main(String[] args) {
-        Integer num1 = 84, num2 = 13;
-        //System.out.println(Integer.toBinaryString(num1.byteValue() << 5));
-        //System.out.println(product(num1.byteValue(),num2.byteValue(),(byte)0)); //Print as int
-        //System.out.println(Binary.getBinary(product(num1.byteValue(),num2.byteValue(),(byte)0))); // Print as binary
-        byte tmp = product(num1.byteValue(),num2.byteValue(),355);
+        int num1 = 84, num2 = 13;
+        byte tmp = product(num1,num2,355);
         System.out.println(tmp);
 
     }
@@ -66,7 +58,9 @@ public class GaloisField {
         return binaryAsList;
     }
 
-    public static byte moduleReducer(List<Integer> px, List<Integer> mx) {
+    public static byte moduleReducer(int tmp, int generator) {
+        List<Integer> px = mapToList(tmp);
+        List<Integer> mx = mapToList(generator);
         int gradeDiff = px.size() - mx.size();
         List<Integer> currentPx = new ArrayList<>(px);
         List<Integer> ratio = new ArrayList<>();
