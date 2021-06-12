@@ -1,16 +1,15 @@
-import com.idrsolutions.image.JDeli;
 import models.BMPImage;
+import models.Carrier;
 import models.Config;
+import utils.BMPUtils;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         Config config = new Config(args);
         BMPImage bmpImage = new BMPImage(config.getSecretImage().getPath(), config.getK());
-        //List<List<Byte>> squaredMatrix = bmpImage.getSquaredMatrix();
+        Carrier imageAsCarrier = bmpImage.getSquaredMatrix();
+        List<Carrier> carriers = BMPUtils.getCarriers(config.isD() ? config.getHideInDirectory() : config.getRecoverFormDirectory(), config.getK());
     }
 }
