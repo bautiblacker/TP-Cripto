@@ -1,6 +1,8 @@
 package utils;
 
 import models.Carrier;
+import models.MathFunction;
+import models.MultExpression;
 import net.sf.image4j.codec.bmp.BMPDecoder;
 
 import java.awt.image.BufferedImage;
@@ -73,5 +75,33 @@ public class BMPUtils {
 
         }
         return new Carrier(squaredMatrix);
+    }
+
+    /*public static Carrier getSquaredMatrix(byte[] secretImage, int k) {
+        List<List<Byte>> tmp = new ArrayList<>();
+        int index = 0;
+        for(int i = 0; i < secretImage.length; i++){
+            List<Byte> aux = new ArrayList<>();
+            for(int j = 0; j < k ;k++){
+                aux.add(secretImage[index++]);
+            }
+            tmp.add(aux);
+        }
+        return new Carrier(tmp);
+    }*/
+
+    public static List<MathFunction> getFunctions(byte[] secretImage, int k){
+        List<MathFunction> tmp = new ArrayList<>();
+        int index = 0;
+        for(int i = 0; i < secretImage.length; i++){
+            MathFunction aux = new MathFunction();
+            for(int j = 0; j < k ;k++){
+                MultExpression multExpression = new MultExpression();
+                //TODO: SHOULD I HANDLE BYTES OR INTEGER???
+                multExpression.addExpression(Byte.toUnsignedInt(secretImage[index++]));
+            }
+            tmp.add(aux);
+        }
+        return tmp;
     }
 }

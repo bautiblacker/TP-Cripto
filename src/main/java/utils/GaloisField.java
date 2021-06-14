@@ -8,8 +8,8 @@ public class GaloisField {
     static Map<Integer, Integer> map = Binary.getMappingByte();
     public static Byte add(Byte b1, Byte b2){
         // convert to ints and xor
-        int one = (int)b1;
-        int two = (int)b2;
+        int one = Byte.toUnsignedInt(b1);
+        int two = Byte.toUnsignedInt(b2);
         int xor = one ^ two;
 
         // convert back to byte
@@ -38,9 +38,9 @@ public class GaloisField {
     }
 
     public static void main(String[] args) {
-        int num1 = 84, num2 = 13;
+        int num1 = 7, num2 = 240;
         byte tmp = product(num1,num2,355);
-        System.out.println(tmp);
+        System.out.println(Byte.toUnsignedInt(tmp));
 
     }
     public static long getUnsignedInt(int x) {
@@ -49,6 +49,8 @@ public class GaloisField {
 
     private static List<Integer> mapToList(Integer n) {
         Integer maxValue = Binary.getMappingByte().get(Integer.highestOneBit(n));
+        if(maxValue == null)
+            maxValue = 8;
         String binary = Binary.getBinary(n, maxValue);
         List<Integer> binaryAsList = new ArrayList<>();
         for(String bit : binary.split("")) {
@@ -77,6 +79,8 @@ public class GaloisField {
             }
 
             int index = getIndex(tempPx);
+            if(index == -1)
+                return 0; //TODO: Fijarse si esto esta bien
             currentPx = new ArrayList<>(tempPx.subList(index, tempPx.size()));
             gradeDiff = (currentPx.size() - mx.size());
         }

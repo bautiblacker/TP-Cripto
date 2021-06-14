@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultExpression implements MathExpressions<Integer> {
+    //TODO: Should be byte??
     List<Integer> subFunction;
-    MultExpression(){
+    public MultExpression(){
         subFunction = new ArrayList<>();
     }
     public void addExpression(Integer exp){
@@ -16,8 +17,8 @@ public class MultExpression implements MathExpressions<Integer> {
     }
     public int eval() {
         int resp = subFunction.get(0);
-        for(int i = 1;i<subFunction.size();i++){
-            resp += GaloisField.moduleReducer(GaloisField.product(resp,subFunction.get(i)),355);
+        for(int i = 1;i < subFunction.size();i++){
+            resp = Byte.toUnsignedInt(GaloisField.moduleReducer(GaloisField.product(resp,subFunction.get(i)),355));
         }
         return resp;
     }
