@@ -43,14 +43,18 @@ public class BMPUtils {
             byte[] image = ((DataBufferByte) imageInfo.getData().getDataBuffer()).getData();
             int height = imageInfo.getHeight();
             int width = imageInfo.getWidth();
+            carriers.forEach(carrier -> {
+                carrier.setHeight(height);
+                carrier.setWidth(width);
+            });
 
-            carriers.add(getSquaredMatrix(image, height, width));
+            carriers.add(getSquaredMatrix(image, height, width, file));
         } catch (Exception e) {
             System.out.println("Error while reading file" + imageFile.getName());
         }
     }
 
-    private static Carrier getSquaredMatrix(byte[] image, int height, int width) throws IOException {
+    private static Carrier getSquaredMatrix(byte[] image, int height, int width, String path) throws IOException {
         List<List<Byte>> binaryImage = new ArrayList<>();
         int size = image.length;
         if(height%2 != 0) throw new IOException("Invalid image or k.");
@@ -76,7 +80,7 @@ public class BMPUtils {
             }
         }
 
-        return new Carrier(squaredMatrix);
+        return new Carrier(squaredMatrix, path);
     }
 
     /*private static void reverseGetSquaredMatrix(Carrier myCarrier, int height, int width){
@@ -136,10 +140,11 @@ public class BMPUtils {
         return tmp;
     }
 
-    public void saveImage(Carrier carrier, int height, int width) {
-        byte[] carrierByteArray =  BMPUtils.reverseCarrier(carrier, height, width);
-        // 1. reverse carrier
-        // 2. save image :)
+    public static void saveAll(List<Carrier> carriers) {
+        for(Carrier carrier : carriers) {
+            byte[] carrierByteArray =  BMPUtils.reverseCarrier(carrier);
+        }
+
     }
 
     public static List<Byte> convertSecretToMatrix(byte[] image, int height, int width, int k){
@@ -165,35 +170,27 @@ public class BMPUtils {
         return fullArray;
     }
 
-    public static byte[] reverseCarrier(Carrier myCarrier, int heigth, int width){
-        //TODO: CHANGE BYTE[][] TO LIST<LIST<BYTE>>
-        byte[][] blockArray = new byte[heigth][width];
+    public static byte[] reverseCarrier(Carrier myCarrier){
+        List<List<Byte>> blockList = new ArrayList<>();
+        int heigth = myCarrier.getHeight();
+        int width = myCarrier.getWidth();
         int index = 0;
-        for(int i = 0; i < heigth/2; i++){
-            //blockList.set(2*i, new ArrayList<>());
-            //blockList.set(2*i + 1, new ArrayList<>());
-            for(int j = 0; j < width/2; j++){
+        for(int i = 0; i < heigth/2; i++) {
+            blockList.add(2 * i, new ArrayList<>());
+            blockList.add(2*i + 1, new ArrayList<>());
+            for (int j = 0; j < width / 2; j++) {
                 Byte x = myCarrier.getImageBlockBytes().get(index).get(0);
                 Byte w = myCarrier.getImageBlockBytes().get(index).get(1);
                 Byte v = myCarrier.getImageBlockBytes().get(index).get(2);
                 Byte u = myCarrier.getImageBlockBytes().get(index).get(3);
 
-                blockArray[2*i][2*j] = x;
-                blockArray[2*i][2*j+1] = w;
-                blockArray[2*i+1][2*j] = v;
-                blockArray[2*i+1][2*j+1] = u;
+                blockList.get(2 * i).add(2 * j, x);
+                blockList.get(2 * i).add(2 * j + 1, w);
+                blockList.get(2 * i + 1).add(2 * j, v);
+                blockList.get(2 * i + 1).add(2 * j + 1, u);
 
-                index ++;
+                index++;
             }
-        }
-        List<List<Byte>> blockList = new ArrayList<>();
-
-        for(int i = 0; i < heigth; i++){
-            List<Byte> tmp = new ArrayList<>();
-            for(int j = 0; j < width; j++){
-                tmp.add(blockArray[i][j]);
-            }
-            blockList.add(tmp);
         }
 
         Collections.reverse(blockList);
@@ -215,9 +212,9 @@ public class BMPUtils {
             carrierImage[i] = (byte) i;
         }
         int heigth = 6, width = 6, k = 4;
-        Carrier carrier = BMPUtils.getSquaredMatrix(carrierImage,heigth, width);
+        Carrier carrier = BMPUtils.getSquaredMatrix(carrierImage,heigth, width, null);
 
-        byte[] convertedCarrierImage = BMPUtils.reverseCarrier(carrier,heigth,width);
+        byte[] convertedCarrierImage = BMPUtils.reverseCarrier(carrier);
         System.out.println("HOLA");
     }
 }

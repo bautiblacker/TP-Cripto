@@ -6,9 +6,16 @@ import utils.Binary;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class Carrier {
     private List<List<Byte>> imageBlockBytes;
+    private String filePath;
+    private int height;
+    private int width;
+
+    public Carrier(List<List<Byte>> imageBlockBytes, String filePath) {
+        this.imageBlockBytes = imageBlockBytes;
+        this.filePath = filePath;
+    }
 
     public void setXAtIndex(int index, Byte fx) {
         boolean[] fxAsBitArray = Binary.toBits(fx);

@@ -35,7 +35,8 @@ public class Siscomo {
             index++;
         }
 
-        //save image
+        // TODO: add headers
+        BMPUtils.saveAll(carriers);
     }
 
     private int getAvailableFx(int value, Set<Integer> takenFx, int k) {
