@@ -26,7 +26,7 @@ public class GaloisField {
                 if(firstTime) {
                     tmp = aux;
                     firstTime = false;
-                }else
+                } else
                     tmp = tmp ^ aux;
             }
         }
@@ -65,7 +65,7 @@ public class GaloisField {
         List<Integer> mx = mapToList(generator);
         int gradeDiff = px.size() - mx.size();
         List<Integer> currentPx = new ArrayList<>(px);
-        List<Integer> ratio = new ArrayList<>();
+        List<Integer> ratio;
 
         while(gradeDiff >= 0) {
             List<Integer> tempPx = new ArrayList<>();
@@ -85,7 +85,6 @@ public class GaloisField {
             gradeDiff = (currentPx.size() - mx.size());
         }
 
-
         return Binary.getBinary(currentPx);
     }
 
@@ -98,5 +97,4 @@ public class GaloisField {
 
         return -1;
     }
-
 }

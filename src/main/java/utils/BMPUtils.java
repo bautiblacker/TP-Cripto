@@ -1,5 +1,6 @@
 package utils;
 
+import models.BMPImage;
 import models.Carrier;
 import models.MathFunction;
 import models.MultExpression;
@@ -72,36 +73,27 @@ public class BMPUtils {
                 aux.add(binaryImage.get(i+1).get(j+1));
                 squaredMatrix.add(aux);
             }
-
         }
+
         return new Carrier(squaredMatrix);
     }
 
-    /*public static Carrier getSquaredMatrix(byte[] secretImage, int k) {
-        List<List<Byte>> tmp = new ArrayList<>();
-        int index = 0;
-        for(int i = 0; i < secretImage.length; i++){
-            List<Byte> aux = new ArrayList<>();
-            for(int j = 0; j < k ;k++){
-                aux.add(secretImage[index++]);
-            }
-            tmp.add(aux);
-        }
-        return new Carrier(tmp);
-    }*/
-
     public static List<MathFunction> getFunctions(byte[] secretImage, int k){
         List<MathFunction> tmp = new ArrayList<>();
-        int index = 0;
-        for(int i = 0; i < secretImage.length; i++){
+        for(int i = 0; i < secretImage.length; ){
             MathFunction aux = new MathFunction();
-            for(int j = 0; j < k ;k++){
+            for(int j = 0; j < k ;k++) {
                 MultExpression multExpression = new MultExpression();
-                //TODO: SHOULD I HANDLE BYTES OR INTEGER???
-                multExpression.addExpression(Byte.toUnsignedInt(secretImage[index++]));
+                multExpression.addExpression(Byte.toUnsignedInt(secretImage[i++]));
             }
+
             tmp.add(aux);
         }
         return tmp;
+    }
+
+    public void saveImage(Carrier carrier) {
+        // 1. reverse carrier
+        // 2. save image :)
     }
 }

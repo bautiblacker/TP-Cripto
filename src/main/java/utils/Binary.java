@@ -56,4 +56,23 @@ public class Binary {
         return (byte) result;
     }
 
+    public static boolean[] toBits(Byte val) {
+        boolean[] bitArray = new boolean[8];
+        for (int i = 0; i < 8; i++) {
+            bitArray[i] = (val >> (8 - (i + 1)) & 0x0001) == 1;
+        }
+
+        return bitArray;
+    }
+
+    public static Byte toInt(boolean[] bitArray) {
+        byte value = 0;
+        for(int i = 0; i < 8; i++) {
+            if(bitArray[i]) {
+                value |= (byte)(1 << i);
+            }
+        }
+        return value;
+    }
+
 }
