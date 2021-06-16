@@ -10,13 +10,15 @@ import java.io.File;
 @Data
 public class BMPImage {
     private byte[] secretImage;
-    private int k;
+    private int k, height, width;
 
     public BMPImage(String path, int k) throws Exception {
         this.k = k;
         File imageFile = FileUtils.parseFile(path);
         try {
            secretImage = ((DataBufferByte) BMPDecoder.read(imageFile).getData().getDataBuffer()).getData();
+           height = BMPDecoder.read(imageFile).getHeight();
+           width = BMPDecoder.read(imageFile).getWidth();
         } catch (Exception e) {
             System.out.println("Error while reading file" + imageFile.getName());
             throw  new Exception(e.getMessage());

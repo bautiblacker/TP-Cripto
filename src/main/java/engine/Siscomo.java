@@ -16,7 +16,9 @@ public class Siscomo {
         String hideInDirectory = config.getHideInDirectory();
 
         List<Carrier> carriers = BMPUtils.getCarriers(hideInDirectory, k);
-        List<MathFunction> polynomialImage = BMPUtils.getFunctions(bmpImage.getSecretImage(), k);
+        List<Byte> secretImage = BMPUtils.convertSecretToMatrix(bmpImage.getSecretImage(), bmpImage.getHeight(),
+                bmpImage.getWidth(),config.getK());
+        List<MathFunction> polynomialImage = BMPUtils.getFunctions(secretImage, k);
 
         int index = 0;
         Set<Integer> takenFx = new HashSet<>();
