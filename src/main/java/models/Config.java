@@ -1,5 +1,6 @@
 package models;
 
+import com.sun.media.sound.InvalidFormatException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import utils.FileUtils;
@@ -23,6 +24,8 @@ public class Config {
             parse(args);
         } catch (FileNotFoundException e) {
             System.out.println("unable to locate file. Error " + e);
+        } catch (InvalidFormatException e) {
+
         }
     }
 
@@ -36,7 +39,7 @@ public class Config {
      *
      * @param args the console arguments
      */
-    private void parse(String[] args) throws FileNotFoundException {
+    private void parse(String[] args) throws FileNotFoundException, InvalidFormatException {
         if(args[0].equals("d")) {
             this.d = true;
             this.hideInDirectory = args[3];
@@ -46,5 +49,29 @@ public class Config {
         }
         this.k = Integer.parseInt(args[2]);
         this.secretImage = FileUtils.parseFile(args[1]);
+    }
+
+    public int getK() {
+        return k;
+    }
+
+    public String getHideInDirectory() {
+        return hideInDirectory;
+    }
+
+    public String getRecoverFormDirectory() {
+        return recoverFormDirectory;
+    }
+
+    public boolean isD() {
+        return d;
+    }
+
+    public boolean isR() {
+        return r;
+    }
+
+    public File getSecretImage() {
+        return secretImage;
     }
 }

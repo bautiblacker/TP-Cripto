@@ -1,21 +1,23 @@
 package utils;
 
+import jj2000.j2k.codestream.HeaderInfo;
 import models.BMPImage;
 import models.Carrier;
 import models.MathFunction;
 import models.MultExpression;
 import net.sf.image4j.codec.bmp.BMPDecoder;
+import net.sf.image4j.codec.bmp.InfoHeader;
+import net.sf.image4j.io.LittleEndianInputStream;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class BMPUtils {
+    public static final int HEADER_LENGTH = 1078;
 
     public static List<Carrier> getCarriers(String folderPath, int k) throws Exception {
         final File folder = new File(folderPath);
@@ -38,8 +40,10 @@ public class BMPUtils {
 
     private static void reverseCarrier(List<Carrier> carriers, String file) throws FileNotFoundException {
         File imageFile = FileUtils.parseFile(file);
+        InputStream imageFileInputStream = new FileInputStream(imageFile);
         try {
             BufferedImage imageInfo = BMPDecoder.read(imageFile);
+            InfoHeader imageHeader = BMPDecoder.readInfoHeader(new LittleEndianInputStream(imageFileInputStream));
             byte[] image = ((DataBufferByte) imageInfo.getData().getDataBuffer()).getData();
             int height = imageInfo.getHeight();
             int width = imageInfo.getWidth();
@@ -48,13 +52,13 @@ public class BMPUtils {
                 carrier.setWidth(width);
             });
 
-            carriers.add(getSquaredMatrix(image, height, width, file));
+            carriers.add(getSquaredMatrix(image, height, width, file, imageHeader));
         } catch (Exception e) {
             System.out.println("Error while reading file" + imageFile.getName());
         }
     }
 
-    private static Carrier getSquaredMatrix(byte[] image, int height, int width, String path) throws IOException {
+    private static Carrier getSquaredMatrix(byte[] image, int height, int width, String path, InfoHeader imageHeader) throws IOException {
         List<List<Byte>> binaryImage = new ArrayList<>();
         int size = image.length;
         if(height%2 != 0) throw new IOException("Invalid image or k.");
@@ -80,7 +84,7 @@ public class BMPUtils {
             }
         }
 
-        return new Carrier(squaredMatrix, path);
+        return new Carrier(squaredMatrix, path, imageHeader);
     }
 
     /*private static void reverseGetSquaredMatrix(Carrier myCarrier, int height, int width){
@@ -196,7 +200,8 @@ public class BMPUtils {
         Collections.reverse(blockList);
 
         index = 0;
-        byte[] image = new byte[heigth * width];
+        byte[] image = new byte[HEADER_LENGTH + heigth * width];
+        //TODO: We should add the header first
         for(List<Byte> byteList : blockList){
             for(Byte b : byteList){
                 image[index++] = b;
@@ -212,7 +217,7 @@ public class BMPUtils {
             carrierImage[i] = (byte) i;
         }
         int heigth = 6, width = 6, k = 4;
-        Carrier carrier = BMPUtils.getSquaredMatrix(carrierImage,heigth, width, null);
+        Carrier carrier = BMPUtils.getSquaredMatrix(carrierImage,heigth, width, null, null);
 
         byte[] convertedCarrierImage = BMPUtils.reverseCarrier(carrier);
         System.out.println("HOLA");

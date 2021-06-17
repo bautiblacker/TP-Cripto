@@ -1,20 +1,23 @@
 package models;
 
 import lombok.*;
+import net.sf.image4j.codec.bmp.InfoHeader;
 import utils.Binary;
 
 import java.util.List;
 
 @Data
 public class Carrier {
+    private InfoHeader header;
     private List<List<Byte>> imageBlockBytes;
     private String filePath;
     private int height;
     private int width;
 
-    public Carrier(List<List<Byte>> imageBlockBytes, String filePath) {
+    public Carrier(List<List<Byte>> imageBlockBytes, String filePath, InfoHeader header) {
         this.imageBlockBytes = imageBlockBytes;
         this.filePath = filePath;
+        this.header = header;
     }
 
     public void setXAtIndex(int index, Byte fx) {
@@ -48,5 +51,27 @@ public class Carrier {
         return counter % 2 == 0;
     }
 
+    public List<List<Byte>> getImageBlockBytes() {
+        return imageBlockBytes;
+    }
 
+    public void saveToFile(String fileName) {
+
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 }
