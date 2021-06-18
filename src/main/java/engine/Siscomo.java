@@ -6,12 +6,14 @@ import models.Config;
 import models.MathFunction;
 import utils.BMPUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class Siscomo {
-    public static void encrypt(BMPImage bmpImage, Config config) throws Exception {
+    public static void encrypt(Config config) throws Exception {
+        BMPImage bmpImage = new BMPImage(config.getSecretImage().getPath(), config.getK());
         int k = config.getK();
         String hideInDirectory = config.getHideInDirectory();
 
@@ -35,7 +37,6 @@ public class Siscomo {
             index++;
         }
 
-        // TODO: add headers
         try {
             BMPUtils.saveAll(carriers);
         } catch (Exception e) {
@@ -50,5 +51,22 @@ public class Siscomo {
         }
 
         return value;
+    }
+
+    public static void decrypt(Config config) throws Exception {
+        String recover = config.getRecoverFormDirectory();
+        int k = config.getK();
+        List<Carrier> carriers = BMPUtils.getCarriers(recover, k);
+
+        int index = 0;
+        for(Carrier carrier : carriers){
+            for(int i = 0; i < carrier.getHeight()*carrier.getWidth()/config.getK();i++){
+                index++;
+                Byte x = carrier.getImageBlockBytes().get(i).get(0);
+                Byte fx = Carrier.getFXFromBlock(carrier.getImageBlockBytes().get(i).get(1),
+                        carrier.getImageBlockBytes().get(i).get(2),
+                        carrier.getImageBlockBytes().get(i).get(3));
+            }
+        }
     }
 }

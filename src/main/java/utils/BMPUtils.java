@@ -1,6 +1,5 @@
 package utils;
 
-import jj2000.j2k.codestream.HeaderInfo;
 import models.BMPImage;
 import models.Carrier;
 import models.MathFunction;

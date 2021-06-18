@@ -9,11 +9,10 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws Exception {
         Config config = new Config(args);
-        BMPImage bmpImage = new BMPImage(config.getSecretImage().getPath(), config.getK());
-        //Carrier imageAsCarrier = BMPUtils.getSquaredMatrix(bmpImage.getSecretImage(), config.getK());
-//        List<Carrier> carriers = BMPUtils.getCarriers(config.isD() ? config.getHideInDirectory() : config.getRecoverFormDirectory(), config.getK());
-//        System.out.println(carriers.get(0).getHeader()[1]);
-        Siscomo.encrypt(bmpImage, config);
+        if(config.isR())
+            Siscomo.decrypt(config);
+        else
+            Siscomo.encrypt(config);
 
     }
 }

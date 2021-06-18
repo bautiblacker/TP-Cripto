@@ -21,6 +21,35 @@ public class Carrier {
         this.height = height;
     }
 
+    public static Byte getFXFromBlock(Byte w, Byte v, Byte u) throws Exception {
+        boolean[] wAsBitArray = Binary.toBits(w);
+        boolean[] vAsBitArray = Binary.toBits(v);
+        boolean[] uAsBitArray = Binary.toBits(u);
+        boolean[] fxAsBitArray = new boolean[8];
+
+        int index = 0;
+        fxAsBitArray[index++] = wAsBitArray[5];
+        fxAsBitArray[index++] = wAsBitArray[6];
+        fxAsBitArray[index++] = wAsBitArray[7];
+        fxAsBitArray[index++] = vAsBitArray[5];
+        fxAsBitArray[index++] = vAsBitArray[6];
+        fxAsBitArray[index++] = vAsBitArray[7];
+        fxAsBitArray[index++] = uAsBitArray[6];
+        fxAsBitArray[index++] = uAsBitArray[7];
+
+        int count = 0;
+        for(int i = 0;i < fxAsBitArray.length;i++){
+            if(fxAsBitArray[i])
+                count++;
+        }
+        int parity = uAsBitArray[5] ? 1 : 0;
+
+        if(count % 2 == parity)
+            throw new Exception("Bit parity check");
+
+        return Binary.toByte(fxAsBitArray);
+    }
+
     public void setXAtIndex(int index, Byte fx) {
         boolean[] fxAsBitArray = Binary.toBits(fx);
         List<Byte> block = imageBlockBytes.get(index);
