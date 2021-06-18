@@ -1,3 +1,4 @@
+import engine.Siscomo;
 import models.BMPImage;
 import models.Carrier;
 import models.Config;
@@ -10,6 +11,9 @@ public class Main {
         Config config = new Config(args);
         BMPImage bmpImage = new BMPImage(config.getSecretImage().getPath(), config.getK());
         //Carrier imageAsCarrier = BMPUtils.getSquaredMatrix(bmpImage.getSecretImage(), config.getK());
-        List<Carrier> carriers = BMPUtils.getCarriers(config.isD() ? config.getHideInDirectory() : config.getRecoverFormDirectory(), config.getK());
+//        List<Carrier> carriers = BMPUtils.getCarriers(config.isD() ? config.getHideInDirectory() : config.getRecoverFormDirectory(), config.getK());
+//        System.out.println(carriers.get(0).getHeader()[1]);
+        Siscomo.encrypt(bmpImage, config);
+
     }
 }

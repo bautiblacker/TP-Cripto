@@ -27,12 +27,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.idrsolutions</groupId>
-            <artifactId>jdeli</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>

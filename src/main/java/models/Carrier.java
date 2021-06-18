@@ -8,16 +8,18 @@ import java.util.List;
 
 @Data
 public class Carrier {
-    private InfoHeader header;
+    private byte[] header;
     private List<List<Byte>> imageBlockBytes;
     private String filePath;
     private int height;
     private int width;
 
-    public Carrier(List<List<Byte>> imageBlockBytes, String filePath, InfoHeader header) {
+    public Carrier(List<List<Byte>> imageBlockBytes, String filePath, byte[] header, int width,int height) {
         this.imageBlockBytes = imageBlockBytes;
         this.filePath = filePath;
         this.header = header;
+        this.width = width;
+        this.height = height;
     }
 
     public void setXAtIndex(int index, Byte fx) {

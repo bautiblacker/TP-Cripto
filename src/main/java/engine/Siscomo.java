@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Siscomo {
-    public void encrypt(BMPImage bmpImage, Config config) throws Exception {
+    public static void encrypt(BMPImage bmpImage, Config config) throws Exception {
         int k = config.getK();
         String hideInDirectory = config.getHideInDirectory();
 
@@ -36,10 +36,14 @@ public class Siscomo {
         }
 
         // TODO: add headers
-        BMPUtils.saveAll(carriers);
+        try {
+            BMPUtils.saveAll(carriers);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private int getAvailableFx(int value, Set<Integer> takenFx, int k) {
+    private static int getAvailableFx(int value, Set<Integer> takenFx, int k) {
         for(int i = 0; i < k; i++) {
             if(!takenFx.contains(value)) return value;
             value++;
