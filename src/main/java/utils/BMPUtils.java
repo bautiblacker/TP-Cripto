@@ -139,13 +139,14 @@ public class BMPUtils {
 
     public static List<MathFunction>  getFunctions(List<Byte> secretImage, int k){
         List<MathFunction> tmp = new ArrayList<>();
+        int counter = 0;
         for(int i = 0; i < secretImage.size(); ){
             MathFunction aux = new MathFunction();
             for(int j = 0; j < k ;j++) {
                 MultExpression multExpression = new MultExpression();
                 multExpression.addExpression(Byte.toUnsignedInt(secretImage.get(i++)));
+                aux.addExpression(multExpression);
             }
-
             tmp.add(aux);
         }
         return tmp;

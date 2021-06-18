@@ -1,7 +1,6 @@
 package models;
 
 import lombok.*;
-import net.sf.image4j.codec.bmp.InfoHeader;
 import utils.Binary;
 
 import java.util.List;
@@ -34,14 +33,14 @@ public class Carrier {
             blockSquareAsBitArray[5] = fxAsBitArray[xIndex++];
             blockSquareAsBitArray[6] = fxAsBitArray[xIndex++];
             blockSquareAsBitArray[7] = fxAsBitArray[xIndex++];
-            block.set(i, Binary.toInt(blockSquareAsBitArray));
+            block.set(i, Binary.toByte(blockSquareAsBitArray));
         }
 
         blockSquareAsBitArray = Binary.toBits(block.get(i));
         blockSquareAsBitArray[5] = getParityBit(fxAsBitArray);
         blockSquareAsBitArray[6] = fxAsBitArray[xIndex++];
         blockSquareAsBitArray[7] = fxAsBitArray[xIndex];
-        block.set(i, Binary.toInt(blockSquareAsBitArray));
+        block.set(i, Binary.toByte(blockSquareAsBitArray));
     }
 
     private boolean getParityBit(boolean[] bitArray) {

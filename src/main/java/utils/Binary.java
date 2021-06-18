@@ -65,14 +65,24 @@ public class Binary {
         return bitArray;
     }
 
-    public static Byte toInt(boolean[] bitArray) {
-        byte value = 0;
-        for(int i = 0; i < 8; i++) {
-            if(bitArray[i]) {
-                value |= (byte)(1 << i);
-            }
+    public static Byte toByte(boolean[] bitArray) {
+        int n = 0, l = bitArray.length;
+        for (int i = 0; i < l; ++i) {
+            n = (n << 1) + (bitArray[i] ? 1 : 0);
         }
-        return value;
+        return (byte) n;
     }
+
+//    public static int toInt(boolean[] bitArray) {
+//        int result = 0;
+//        int currVal = 1;
+//        for(int i = 7; i >= 0; i--) {
+//            if(bitArray[i]) {
+//                result += currVal;
+//            }
+//            currVal *= 2;
+//        }
+//        return result;
+//    }
 
 }
