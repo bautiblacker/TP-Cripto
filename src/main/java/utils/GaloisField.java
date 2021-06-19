@@ -37,12 +37,7 @@ public class GaloisField {
         return moduleReducer(product(b1,b2), generator);
     }
 
-    public static void main(String[] args) {
-        int num1 = 7, num2 = 240;
-        byte tmp = product(num1,num2,355);
-        System.out.println(Byte.toUnsignedInt(tmp));
 
-    }
     public static long getUnsignedInt(int x) {
         return x & (-1L >>> 32);
     }
@@ -106,11 +101,18 @@ public class GaloisField {
 
     public static byte inverse(byte x){
         for(int i = 0; i < 255 ; i++){
+            //EL MODULO ES CLAVE!!!!!
             if(moduleReducer(product((byte) i,x),355) == 1)
                 return (byte) i;
 
         }
         return x;
+    }
+
+    public static void main(String[] args) {
+        byte num1 = 5, num2 = 20;
+        byte tmp = divide(num1,num2);
+        System.out.println(Byte.toUnsignedInt(tmp));
     }
 
 }
