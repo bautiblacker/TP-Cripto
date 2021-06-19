@@ -33,6 +33,11 @@ public class BMPImage {
         }
     }
 
+    public BMPImage(byte[] header, byte[] secretImage) {
+        this.header = header;
+        this.secretImage = secretImage;
+    }
+
     public byte[] getHeader() {
         return header;
     }

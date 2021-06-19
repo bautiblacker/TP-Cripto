@@ -43,12 +43,13 @@ public class Config {
         if(args[0].equals("d")) {
             this.d = true;
             this.hideInDirectory = args[3];
+            this.secretImage = FileUtils.parseFile(args[1]);
         } else {
             this.r = true;
             this.recoverFormDirectory = args[3];
+            this.secretImage = new File(args[1]);
         }
         this.k = Integer.parseInt(args[2]);
-        this.secretImage = FileUtils.parseFile(args[1]);
     }
 
     public int getK() {

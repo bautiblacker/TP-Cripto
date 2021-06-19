@@ -1,10 +1,9 @@
 package engine;
 
-import models.BMPImage;
-import models.Carrier;
-import models.Config;
-import models.MathFunction;
+import javafx.util.Pair;
+import models.*;
 import utils.BMPUtils;
+import utils.GaloisField;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,17 +22,21 @@ public class Siscomo {
         List<MathFunction> polynomialImage = BMPUtils.getFunctions(secretImage, k);
 
         int index = 0;
-        Set<Integer> takenFx = new HashSet<>();
+        Set<Byte> takenX = new HashSet<>();
         for(MathFunction mathFunction : polynomialImage) {
             for(Carrier carrier : carriers) {
                 Byte x = carrier.getImageBlockBytes().get(index).get(0);
+                x = getAvailableX(x, takenX, k);
+                if (x == -41 && takenX.contains(-41)){
+                    System.out.println("Tuvo");
+                }
+                takenX.add(x);
                 mathFunction.fill(x);
-                int fx = getAvailableFx(mathFunction.eval(), takenFx, k);
-                takenFx.add(fx);
+                int fx = mathFunction.eval();
                 Byte byteFx = (byte) fx;
                 carrier.setXAtIndex(index, byteFx);
             }
-            takenFx.clear();
+            takenX.clear();
             index++;
         }
 
@@ -44,10 +47,10 @@ public class Siscomo {
         }
     }
 
-    private static int getAvailableFx(int value, Set<Integer> takenFx, int k) {
+    private static Byte getAvailableX(Byte value, Set<Byte> takenFx, int k) {
         for(int i = 0; i < k; i++) {
             if(!takenFx.contains(value)) return value;
-            value++;
+            value = GaloisField.moduleReducer(GaloisField.add(value, (byte)1), 355);
         }
 
         return value;
@@ -57,16 +60,78 @@ public class Siscomo {
         String recover = config.getRecoverFormDirectory();
         int k = config.getK();
         List<Carrier> carriers = BMPUtils.getCarriers(recover, k);
+        byte[] secretImageHeader = carriers.get(0).getHeader();
 
-        int index = 0;
-        for(Carrier carrier : carriers){
-            for(int i = 0; i < carrier.getHeight()*carrier.getWidth()/config.getK();i++){
-                index++;
+        List<List<Pair<Byte, Byte>>> xAndFxPairsForAllBlocks = new ArrayList<>();
+
+        for(int i = 0; i < carriers.get(0).getHeight()*carriers.get(0).getWidth()/config.getK();i++){
+            List<Pair<Byte, Byte>> xAndFxPairForBlock = new ArrayList<>();
+            for(Carrier carrier : carriers){
                 Byte x = carrier.getImageBlockBytes().get(i).get(0);
                 Byte fx = Carrier.getFXFromBlock(carrier.getImageBlockBytes().get(i).get(1),
                         carrier.getImageBlockBytes().get(i).get(2),
                         carrier.getImageBlockBytes().get(i).get(3));
+                xAndFxPairForBlock.add(new Pair<>(x, fx));
+            }
+            xAndFxPairsForAllBlocks.add(xAndFxPairForBlock);
+        }
+        List<Byte[]> blockCoefficients = new ArrayList<>();
+        for (List xAndFxPairsForBlock: xAndFxPairsForAllBlocks) {
+            Byte[] currentBlockCoefficients = getCoefficients(xAndFxPairsForBlock, k);
+            blockCoefficients.add(currentBlockCoefficients);
+        }
+
+        byte[] secretImageData = new byte[blockCoefficients.size() * blockCoefficients.get(0).length];
+        int index = 0;
+        for (Byte[] coefficients: blockCoefficients)
+            for (Byte b: coefficients)
+                secretImageData[index++] = b;
+
+        BMPImage secretImage = new BMPImage(secretImageHeader, secretImageData);
+        BMPUtils.saveBMPIMage(secretImage, config.getSecretImage().getPath());
+    }
+
+    private static Byte[] getCoefficients(List<Pair<Byte, Byte>> xAndFxPairs, int k) {
+        int currentOrder = k;
+        Byte[] coefficients = new Byte[k];
+        int index = 0;
+        byte lastCoefficient = Lagrange.lagrangeInterpolation(xAndFxPairs, (byte)0);
+        coefficients[index++] = lastCoefficient;
+        xAndFxPairs = removeZeroElements(xAndFxPairs);
+        while (--currentOrder > 0) {
+            xAndFxPairs = getprimeYValues(xAndFxPairs, lastCoefficient);
+            lastCoefficient = Lagrange.lagrangeInterpolation(xAndFxPairs, (byte)0);
+            coefficients[index++] = lastCoefficient;
+            xAndFxPairs.remove(xAndFxPairs.size()-1);
+        }
+
+        return coefficients;
+    }
+
+    private static byte getYPrime(Pair<Byte, Byte> xAndFxValues, byte s) {
+        return (byte)((xAndFxValues.getValue() - s) / xAndFxValues.getKey());
+    }
+
+    private static List<Pair<Byte, Byte>> removeZeroElements(List<Pair<Byte, Byte>> list) {
+        boolean foundZeroElement = false;
+        List<Pair<Byte, Byte>> result = new ArrayList<>();
+        for (Pair<Byte, Byte> pair: list){
+            if (!pair.getKey().equals((byte)0)){
+                result.add(pair);
+            } else {
+                foundZeroElement = true;
             }
         }
+        if (!foundZeroElement)
+            result.remove(result.size()-1);
+        return result;
+    }
+
+    private static List<Pair<Byte, Byte>> getprimeYValues(List<Pair<Byte, Byte>> list, byte lastCoefficient) {
+        List<Pair<Byte, Byte>> result = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++){
+            result.add(new Pair<>(list.get(i).getKey(), getYPrime(list.get(i), lastCoefficient)));
+        }
+        return result;
     }
 }

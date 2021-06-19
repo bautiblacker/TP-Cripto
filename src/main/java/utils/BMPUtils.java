@@ -162,6 +162,16 @@ public class BMPUtils {
         }
     }
 
+    public static void saveBMPIMage(BMPImage image, String filePath) {
+        File outputFile = new File(filePath);
+        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
+            outputStream.write(image.getHeader());
+            outputStream.write(image.getSecretImage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static List<Byte> convertSecretToMatrix(byte[] image, int height, int width, int k){
         List<List<Byte>> matrix = new ArrayList<>();
 
