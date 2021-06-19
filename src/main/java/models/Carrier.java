@@ -50,7 +50,8 @@ public class Carrier {
         return Binary.toByte(fxAsBitArray);
     }
 
-    public void setXAtIndex(int index, Byte fx) {
+    public void setXAtIndex(int index, Byte fx, Byte x) {
+        imageBlockBytes.get(index).set(0,x);
         boolean[] fxAsBitArray = Binary.toBits(fx);
         List<Byte> block = imageBlockBytes.get(index);
         int xIndex = 0;

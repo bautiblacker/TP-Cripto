@@ -27,14 +27,11 @@ public class Siscomo {
             for(Carrier carrier : carriers) {
                 Byte x = carrier.getImageBlockBytes().get(index).get(0);
                 x = getAvailableX(x, takenX, k);
-                if (x == -41 && takenX.contains(-41)){
-                    System.out.println("Tuvo");
-                }
                 takenX.add(x);
                 mathFunction.fill(x);
                 int fx = mathFunction.eval();
                 Byte byteFx = (byte) fx;
-                carrier.setXAtIndex(index, byteFx);
+                carrier.setXAtIndex(index, byteFx,x);
             }
             takenX.clear();
             index++;
@@ -50,7 +47,7 @@ public class Siscomo {
     private static Byte getAvailableX(Byte value, Set<Byte> takenFx, int k) {
         for(int i = 0; i < k; i++) {
             if(!takenFx.contains(value)) return value;
-            value = GaloisField.moduleReducer(GaloisField.add(value, (byte)1), 355);
+            value++;
         }
 
         return value;
