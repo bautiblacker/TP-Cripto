@@ -106,7 +106,8 @@ public class Siscomo {
     }
 
     private static byte getYPrime(Pair<Byte, Byte> xAndFxValues, byte s) {
-        return (byte)((xAndFxValues.getValue() - s) / xAndFxValues.getKey());
+        //return (byte)((xAndFxValues.getValue() - s) / xAndFxValues.getKey());
+        return GaloisField.divide(GaloisField.add(xAndFxValues.getValue(),s),xAndFxValues.getKey());
     }
 
     private static List<Pair<Byte, Byte>> removeZeroElements(List<Pair<Byte, Byte>> list) {

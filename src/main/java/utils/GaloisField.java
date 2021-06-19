@@ -97,4 +97,20 @@ public class GaloisField {
 
         return -1;
     }
+
+    public static byte divide(byte b1, byte b2){
+        if(b1 == 0)
+            return 0;
+        return moduleReducer(product(b1,inverse(b2)),355);
+    }
+
+    public static byte inverse(byte x){
+        for(int i = 0; i < 255 ; i++){
+            if(moduleReducer(product((byte) i,x),355) == 1)
+                return (byte) i;
+
+        }
+        return x;
+    }
+
 }

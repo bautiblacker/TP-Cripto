@@ -1,6 +1,7 @@
 package models;
 
 import javafx.util.Pair;
+import utils.GaloisField;
 
 import java.util.List;
 
@@ -15,19 +16,21 @@ public class Lagrange {
 
             for (int j=0;j<n;j++) {
                 if (j!=i){
-                    if (valuePairs.get(i).getKey().equals(valuePairs.get(j).getKey())) {
-                        System.out.println("Tuvi");
-                    }
-                    term = (byte) (term*(xToEvaluate - valuePairs.get(j).getKey())/(valuePairs.get(i).getKey() - valuePairs.get(j).getKey()));
-
+                    //term = (byte) (term*(xToEvaluate - valuePairs.get(j).getKey())/(valuePairs.get(i).getKey() - valuePairs.get(j).getKey()));
+                    //term = GaloisField.moduleReducer();
+                    byte aux1 = GaloisField.add(valuePairs.get(i).getKey(),valuePairs.get(j).getKey());
+                    byte aux2 = GaloisField.add(xToEvaluate,valuePairs.get(j).getKey());
+                    byte prod = (byte) GaloisField.product(Byte.toUnsignedInt(term),Byte.toUnsignedInt(aux2));
+                    term = GaloisField.divide(prod,aux1);
                 }
             }
 
             // Add current term to result
-            result += term;
+            result = GaloisField.add(result,term);
+            //result += term;
         }
 
-        return result;
+        return GaloisField.moduleReducer(result,355);
     }
 
 
