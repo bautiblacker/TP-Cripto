@@ -74,12 +74,8 @@ public class Carrier {
     }
 
     private boolean getParityBit(boolean[] bitArray) {
-        int counter = 0;
-        for(boolean b : bitArray) {
-            counter += b ? 1 : 0;
-        }
-
-        return counter % 2 == 0;
+        return bitArray[0] ^ bitArray[1] ^ bitArray[2] ^ bitArray[3]
+                ^ bitArray[4] ^ bitArray[5] ^ bitArray[6] ^ bitArray[7];
     }
 
     public List<List<Byte>> getImageBlockBytes() {
