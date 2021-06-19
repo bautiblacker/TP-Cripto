@@ -35,11 +35,11 @@ public class Carrier {
         fxAsBitArray[index++] = vAsBitArray[6];
         fxAsBitArray[index++] = vAsBitArray[7];
         fxAsBitArray[index++] = uAsBitArray[6];
-        fxAsBitArray[index++] = uAsBitArray[7];
+        fxAsBitArray[index] = uAsBitArray[7];
 
         int count = 0;
-        for(int i = 0;i < fxAsBitArray.length;i++){
-            if(fxAsBitArray[i])
+        for (boolean b : fxAsBitArray) {
+            if (b)
                 count++;
         }
         int parity = uAsBitArray[5] ? 1 : 0;

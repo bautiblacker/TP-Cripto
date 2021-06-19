@@ -175,7 +175,6 @@ public class BMPUtils {
     public static List<Byte> convertSecretToMatrix(byte[] image, int height, int width, int k){
         List<List<Byte>> matrix = new ArrayList<>();
 
-        //QUIERO EVITAR ESTO....... COMO??
         int idx = 0;
         for(int i = 0;i < height;i++){
             List<Byte> tmp = new ArrayList<>();
