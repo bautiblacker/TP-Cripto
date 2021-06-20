@@ -124,26 +124,16 @@ public class GaloisField {
 //        return Binary.getBinary(currentPx);
 //    }
 
-    private static int getIndex(List<Integer> list) {
-        for(int i = 0; i < list.size(); i++) {
-            if(list.get(i) == 1) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
 
     public static byte divide(byte b1, byte b2){
         if(b1 == 0)
             return 0;
-        return moduleReducer(product(b1,inverse(b2)),355);
+        return moduleReducer(product(Byte.toUnsignedInt(b1),Byte.toUnsignedInt(inverse(b2))),355);
     }
 
     public static byte inverse(byte x){
         for(int i = 0; i < 255 ; i++){
-            //EL MODULO ES CLAVE!!!!!
-            if(moduleReducer(product((byte) i,x),355) == 1)
+            if(moduleReducer(product(i,Byte.toUnsignedInt(x)),355) == 1)
                 return (byte) i;
 
         }
@@ -151,9 +141,10 @@ public class GaloisField {
     }
 
     public static void main(String[] args) {
-        byte num1 = 5, num2 = 20;
+        byte num1 = (byte)200, num2 = 14;
         byte tmp = divide(num1,num2);
         System.out.println(Byte.toUnsignedInt(tmp));
+        System.out.println(Byte.toUnsignedInt(inverse(num2)));
     }
 
 }

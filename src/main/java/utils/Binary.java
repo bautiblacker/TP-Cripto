@@ -5,28 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Binary {
-
-    public static Map<Integer, Integer> getMappingByte(){
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(32768,15);
-        map.put(16384,14);
-        map.put(8192,13);
-        map.put(4096,12);
-        map.put(2048,11);
-        map.put(1024,10);
-        map.put(512,9);
-        map.put(256,8);
-        map.put(128,7);
-        map.put(64,6);
-        map.put(32,5);
-        map.put(16,4);
-        map.put(8,3);
-        map.put(4,2);
-        map.put(2,1);
-        map.put(1,0);
-        return map;
-    }
-
     public static String getBinary(int number, int length) {
         StringBuilder result = new StringBuilder();
         for (int i = length; i >= 0; i--) {
