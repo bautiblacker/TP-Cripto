@@ -20,7 +20,7 @@ public class Lagrange {
                     //term = GaloisField.moduleReducer();
                     byte aux1 = GaloisField.add(valuePairs.get(i).getKey(),valuePairs.get(j).getKey());
                     byte aux2 = GaloisField.add(xToEvaluate,valuePairs.get(j).getKey());
-                    byte prod = (byte) GaloisField.product(Byte.toUnsignedInt(term),Byte.toUnsignedInt(aux2));
+                    byte prod = GaloisField.moduleReducer(GaloisField.product(Byte.toUnsignedInt(term),Byte.toUnsignedInt(aux2), 355), 355);
                     term = GaloisField.divide(prod,aux1);
                 }
             }
@@ -30,7 +30,7 @@ public class Lagrange {
             //result += term;
         }
 
-        return GaloisField.moduleReducer(result,355);
+        return GaloisField.moduleReducer(Byte.toUnsignedInt(result),355);
     }
 
 

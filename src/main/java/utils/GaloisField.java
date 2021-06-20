@@ -5,7 +5,7 @@ import java.util.*;
 
 public class GaloisField {
     //TODO: Cambiar static
-    static Map<Integer, Integer> map = Binary.getMappingByte();
+//    static Map<Integer, Integer> map = Binary.getMappingByte();
     public static Byte add(Byte b1, Byte b2){
         // convert to ints and xor
         int one = Byte.toUnsignedInt(b1);
@@ -54,18 +54,18 @@ public class GaloisField {
         return x & (-1L >>> 32);
     }
 
-    private static List<Integer> mapToList(Integer n) {
-        Integer maxValue = Binary.getMappingByte().get(Integer.highestOneBit(n));
-        if(maxValue == null)
-            maxValue = 8;
-        String binary = Binary.getBinary(n, maxValue);
-        List<Integer> binaryAsList = new ArrayList<>();
-        for(String bit : binary.split("")) {
-            binaryAsList.add(Integer.parseInt(bit));
-        }
-
-        return binaryAsList;
-    }
+//    private static List<Integer> mapToList(Integer n) {
+//        Integer maxValue = Binary.getMappingByte().get(Integer.highestOneBit(n));
+//        if(maxValue == null)
+//            maxValue = 8;
+//        String binary = Binary.getBinary(n, maxValue);
+//        List<Integer> binaryAsList = new ArrayList<>();
+//        for(String bit : binary.split("")) {
+//            binaryAsList.add(Integer.parseInt(bit));
+//        }
+//
+//        return binaryAsList;
+//    }
 
     public static byte moduleReducer(int val, int generator) {
         int gradeDiff = getGradeDiff(val, generator);
