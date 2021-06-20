@@ -20,8 +20,8 @@ public class MultExpression implements MathExpressions<Byte> {
     public byte eval() {
         byte resp = subFunction.get(0);
         for(int i = 1; i < subFunction.size(); i++){
-            resp = (byte)GaloisField.product(resp,subFunction.get(i));
+            resp = GaloisField.moduleReducer(GaloisField.product(Byte.toUnsignedInt(resp),Byte.toUnsignedInt(subFunction.get(i))), 355);
         }
-        return GaloisField.moduleReducer(resp, 355);
+        return resp;
     }
 }

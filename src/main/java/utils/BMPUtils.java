@@ -7,6 +7,7 @@ import models.MultExpression;
 import net.sf.image4j.codec.bmp.BMPDecoder;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;

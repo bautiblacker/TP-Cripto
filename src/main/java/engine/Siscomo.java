@@ -30,6 +30,7 @@ public class Siscomo {
                 takenX.add(x);
                 mathFunction.fill(x);
                 int fx = mathFunction.eval();
+                mathFunction.reset();
                 Byte byteFx = (byte) fx;
                 carrier.setXAtIndex(index, byteFx,x);
             }
