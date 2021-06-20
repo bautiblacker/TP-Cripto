@@ -1,6 +1,6 @@
 package interfaces;
 
 public interface MathExpressions<T> {
-    int eval();
+    byte eval();
     void addExpression(T expression);
 }

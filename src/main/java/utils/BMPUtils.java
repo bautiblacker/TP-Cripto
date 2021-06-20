@@ -5,15 +5,11 @@ import models.Carrier;
 import models.MathFunction;
 import models.MultExpression;
 import net.sf.image4j.codec.bmp.BMPDecoder;
-import net.sf.image4j.codec.bmp.InfoHeader;
-import net.sf.image4j.io.LittleEndianInputStream;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class BMPUtils {
     public static final int HEADER_LENGTH = 1078;
@@ -27,22 +23,28 @@ public class BMPUtils {
         }
         if(files.size() != k)
             throw new Exception("Se necesitan poner " + k + " imagenes en " + folderPath);
-        files.forEach(file -> {
+        for(int i = 0; i < files.size(); i++) {
             try {
-                reverseCarrier(carriers, folderPath + file);
+                reverseCarrier(carriers, folderPath + files.get(i));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        });
+        }
         return carriers;
     }
 
     private static void reverseCarrier(List<Carrier> carriers, String file) throws FileNotFoundException {
         File imageFile = FileUtils.parseFile(file);
         try {
+            byte[] array = Files.readAllBytes(imageFile.toPath());
+            byte[] image = new byte[90000];
+            int index = 0;
+            for(int i = 1078; i < array.length; i++) {
+                image[index++] = array[i];
+            }
             BufferedImage imageInfo = BMPDecoder.read(imageFile);
             byte[] imageHeader = getHeaderFromBMPFile(file);
-            byte[] image = ((DataBufferByte) imageInfo.getData().getDataBuffer()).getData();
+//            byte[] image = ((DataBufferByte) imageInfo.getData().getDataBuffer()).getData();
             int height = imageInfo.getHeight();
             int width = imageInfo.getWidth();
 
@@ -135,15 +137,13 @@ public class BMPUtils {
 
         }
     }*/
-
-    public static List<MathFunction>  getFunctions(List<Byte> secretImage, int k){
+    public static List<MathFunction> getFunctions(List<Byte> secretImage, int k){
         List<MathFunction> tmp = new ArrayList<>();
-        int counter = 0;
         for(int i = 0; i < secretImage.size(); ){
             MathFunction aux = new MathFunction();
-            for(int j = 0; j < k ;j++) {
+            for(int j = 0; j < k; j++) {
                 MultExpression multExpression = new MultExpression();
-                multExpression.addExpression(Byte.toUnsignedInt(secretImage.get(i++)));
+                multExpression.addExpression(secretImage.get(i++));
                 aux.addExpression(multExpression);
             }
             tmp.add(aux);
@@ -217,7 +217,7 @@ public class BMPUtils {
             }
         }
 
-//        Collections.reverse(blockList);
+        Collections.reverse(blockList);
 
         index = 0;
         byte[] image = new byte[HEADER_LENGTH + heigth * width];

@@ -23,19 +23,19 @@ public class MathFunction implements MathExpressions<MultExpression> {
      * Sumar y modulo
      * @return deberia ser int o byte (not sure)
      */
-    public int eval(){
-        int response = 0;
+    public byte eval(){
+        byte response = 0;
         for(MultExpression multExpression: function){
-            response = Byte.toUnsignedInt(GaloisField.add((byte) response, (byte) multExpression.eval()));
+            response = GaloisField.add(response, multExpression.eval());
         }
         //TODO: Should cast to byte?? What happens if it returns 285 for instance?
-        return Byte.toUnsignedInt(GaloisField.moduleReducer(response,355));
+        return GaloisField.moduleReducer(response,355);
     }
 
     public void fill(Byte x) {
         for(int i = 0; i < function.size(); i++) {
             for(int j = 0; j < i; j++) {
-                function.get(i).addExpression(Byte.toUnsignedInt(x));
+                function.get(i).addExpression(x);
             }
         }
     }

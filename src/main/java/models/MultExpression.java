@@ -6,22 +6,22 @@ import utils.GaloisField;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultExpression implements MathExpressions<Integer> {
+public class MultExpression implements MathExpressions<Byte> {
     //TODO: Should be byte??
-    List<Integer> subFunction;
+    List<Byte> subFunction;
     public MultExpression(){
         subFunction = new ArrayList<>();
     }
 
-    public void addExpression(Integer exp){
+    public void addExpression(Byte exp){
         subFunction.add(exp);
     }
 
-    public int eval() {
-        int resp = subFunction.get(0);
+    public byte eval() {
+        byte resp = subFunction.get(0);
         for(int i = 1; i < subFunction.size(); i++){
-            resp = Byte.toUnsignedInt(GaloisField.moduleReducer(GaloisField.product(resp,subFunction.get(i)),355));
+            resp = (byte)GaloisField.product(resp,subFunction.get(i));
         }
-        return resp;
+        return GaloisField.moduleReducer(resp, 355);
     }
 }

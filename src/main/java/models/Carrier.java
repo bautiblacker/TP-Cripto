@@ -37,14 +37,7 @@ public class Carrier {
         fxAsBitArray[index++] = uAsBitArray[6];
         fxAsBitArray[index] = uAsBitArray[7];
 
-        int count = 0;
-        for (boolean b : fxAsBitArray) {
-            if (b)
-                count++;
-        }
-        int parity = uAsBitArray[5] ? 1 : 0;
-
-        if(count % 2 == parity)
+        if(getParityBit(fxAsBitArray) != uAsBitArray[5])
             throw new Exception("Bit parity check");
 
         return Binary.toByte(fxAsBitArray);
@@ -73,7 +66,7 @@ public class Carrier {
         block.set(i, Binary.toByte(blockSquareAsBitArray));
     }
 
-    private boolean getParityBit(boolean[] bitArray) {
+    private static boolean getParityBit(boolean[] bitArray) {
         return bitArray[0] ^ bitArray[1] ^ bitArray[2] ^ bitArray[3]
                 ^ bitArray[4] ^ bitArray[5] ^ bitArray[6] ^ bitArray[7];
     }
