@@ -7,7 +7,6 @@ import models.MultExpression;
 import net.sf.image4j.codec.bmp.BMPDecoder;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
@@ -152,9 +151,9 @@ public class BMPUtils {
         return tmp;
     }
 
-    public static void saveAll(List<Carrier> carriers) throws FileNotFoundException, IOException {
+    public static void saveAll(List<Carrier> carriers, byte[] header) throws FileNotFoundException, IOException {
         for(Carrier carrier : carriers) {
-            byte[] carrierByteArray =  BMPUtils.reverseCarrier(carrier);
+            byte[] carrierByteArray =  BMPUtils.reverseCarrier(carrier, header);
             System.out.println(carrier.getFilePath());
             File outputFile = new File(carrier.getFilePath().split("\\.")[0] + "_final.bmp");
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
@@ -195,7 +194,7 @@ public class BMPUtils {
         return fullArray;
     }
 
-    public static byte[] reverseCarrier(Carrier myCarrier){
+    public static byte[] reverseCarrier(Carrier myCarrier, byte[] header){
         List<List<Byte>> blockList = new ArrayList<>();
         int heigth = myCarrier.getHeight();
         int width = myCarrier.getWidth();
@@ -222,7 +221,7 @@ public class BMPUtils {
 
         index = 0;
         byte[] image = new byte[HEADER_LENGTH + heigth * width];
-        for (byte b: myCarrier.getHeader()) {
+        for (byte b: header) {
             image[index++] = b;
         }
         for(List<Byte> byteList : blockList){
@@ -232,17 +231,5 @@ public class BMPUtils {
         }
 
         return image;
-    }
-
-    public static void main(String[] args) throws IOException {
-        byte[] carrierImage = new byte[36];
-        for(int i = 0;i < 36;i++){
-            carrierImage[i] = (byte) i;
-        }
-        int heigth = 6, width = 6, k = 4;
-        Carrier carrier = BMPUtils.getSquaredMatrix(carrierImage,heigth, width, null, null);
-
-        byte[] convertedCarrierImage = BMPUtils.reverseCarrier(carrier);
-        System.out.println("HOLA");
     }
 }
