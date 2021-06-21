@@ -39,7 +39,7 @@ public class Siscomo {
         }
 
         try {
-            BMPUtils.saveAll(carriers);
+            BMPUtils.saveAll(carriers, bmpImage.getHeader());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -74,7 +74,7 @@ public class Siscomo {
             xAndFxPairsForAllBlocks.add(xAndFxPairForBlock);
         }
         List<Byte[]> blockCoefficients = new ArrayList<>();
-        for (List xAndFxPairsForBlock: xAndFxPairsForAllBlocks) {
+        for (List xAndFxPairsForBlock : xAndFxPairsForAllBlocks) {
             Byte[] currentBlockCoefficients = getCoefficients(xAndFxPairsForBlock, k);
             blockCoefficients.add(currentBlockCoefficients);
         }
