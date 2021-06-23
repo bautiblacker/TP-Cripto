@@ -36,17 +36,16 @@ public class BMPUtils {
     private static void reverseCarrier(List<Carrier> carriers, String file) throws FileNotFoundException {
         File imageFile = FileUtils.parseFile(file);
         try {
+            BufferedImage imageInfo = BMPDecoder.read(imageFile);
+            byte[] imageHeader = getHeaderFromBMPFile(file);
+            int height = imageInfo.getHeight();
+            int width = imageInfo.getWidth();
             byte[] array = Files.readAllBytes(imageFile.toPath());
-            byte[] image = new byte[90000];
+            byte[] image = new byte[height * width];
             int index = 0;
             for(int i = 1078; i < array.length; i++) {
                 image[index++] = array[i];
             }
-            BufferedImage imageInfo = BMPDecoder.read(imageFile);
-            byte[] imageHeader = getHeaderFromBMPFile(file);
-//            byte[] image = ((DataBufferByte) imageInfo.getData().getDataBuffer()).getData();
-            int height = imageInfo.getHeight();
-            int width = imageInfo.getWidth();
 
             carriers.add(getSquaredMatrix(image, height, width, file, imageHeader));
         } catch (Exception e) {
