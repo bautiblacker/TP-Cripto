@@ -76,8 +76,6 @@ public class Siscomo {
         List<Byte[]> blockCoefficients = new ArrayList<>();
         int counter = 0;
         for (List<Pair<Byte, Byte>> xAndFxPairsForBlock : xAndFxPairsForAllBlocks) {
-            if(counter == 233)
-                System.out.println("aaa");
             Byte[] currentBlockCoefficients = getCoefficients(xAndFxPairsForBlock, k); //
             blockCoefficients.add(currentBlockCoefficients);
             counter++;

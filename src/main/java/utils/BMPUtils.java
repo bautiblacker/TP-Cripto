@@ -154,8 +154,8 @@ public class BMPUtils {
     public static void saveAll(List<Carrier> carriers, byte[] header) throws FileNotFoundException, IOException {
         for(Carrier carrier : carriers) {
             byte[] carrierByteArray =  BMPUtils.reverseCarrier(carrier, header);
-            System.out.println(carrier.getFilePath());
-            File outputFile = new File(carrier.getFilePath().split("\\.")[0]);
+            System.out.println("Hiding part of the image at " + carrier.getFilePath());
+            File outputFile = new File(carrier.getFilePath());
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 outputStream.write(carrierByteArray);
             }

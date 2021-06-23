@@ -1,6 +1,5 @@
 package models;
 
-import com.sun.media.sound.InvalidFormatException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import utils.FileUtils;
@@ -24,8 +23,13 @@ public class Config {
             parse(args);
         } catch (FileNotFoundException e) {
             System.out.println("unable to locate file. Error " + e);
-        } catch (InvalidFormatException e) {
-
+            System.exit(1);
+        } catch (NumberFormatException e) {
+            System.out.println("The value provided for K is invalid. Please try again.");
+            System.exit(1);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Not enough parameters! Parameters are [d/r] [SecretImagePath] [K] [CarrierImagesPath]");
+            System.exit(1);
         }
     }
 
@@ -39,12 +43,14 @@ public class Config {
      *
      * @param args the console arguments
      */
-    private void parse(String[] args) throws FileNotFoundException, InvalidFormatException {
+    private void parse(String[] args) throws FileNotFoundException, NumberFormatException, ArrayIndexOutOfBoundsException {
         if(args[0].equals("d")) {
+            System.out.println("Hiding secret image...");
             this.d = true;
             this.hideInDirectory = args[3];
             this.secretImage = FileUtils.parseFile(args[1]);
         } else {
+            System.out.println("Recovering secret image...");
             this.r = true;
             this.recoverFormDirectory = args[3];
             this.secretImage = new File(args[1]);
