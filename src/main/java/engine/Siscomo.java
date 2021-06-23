@@ -74,11 +74,9 @@ public class Siscomo {
             xAndFxPairsForAllBlocks.add(xAndFxPairForBlock);
         }
         List<Byte[]> blockCoefficients = new ArrayList<>();
-        int counter = 0;
         for (List<Pair<Byte, Byte>> xAndFxPairsForBlock : xAndFxPairsForAllBlocks) {
             Byte[] currentBlockCoefficients = getCoefficients(xAndFxPairsForBlock, k); //
             blockCoefficients.add(currentBlockCoefficients);
-            counter++;
         }
 
         byte[] secretImageData = new byte[blockCoefficients.size() * blockCoefficients.get(0).length];

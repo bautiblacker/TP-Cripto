@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+portadoras/
 
 # Log file
 *.log
@@ -25,3 +26,5 @@ hs_err_pid*
 target/
 TP-Cripto.iml
 .DS_Store
+con_secreto/
+portadoras/

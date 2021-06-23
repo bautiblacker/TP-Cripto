@@ -36,17 +36,16 @@ public class BMPUtils {
     private static void reverseCarrier(List<Carrier> carriers, String file) throws FileNotFoundException {
         File imageFile = FileUtils.parseFile(file);
         try {
+            BufferedImage imageInfo = BMPDecoder.read(imageFile);
+            byte[] imageHeader = getHeaderFromBMPFile(file);
+            int height = imageInfo.getHeight();
+            int width = imageInfo.getWidth();
             byte[] array = Files.readAllBytes(imageFile.toPath());
-            byte[] image = new byte[90000];
+            byte[] image = new byte[height * width];
             int index = 0;
             for(int i = 1078; i < array.length; i++) {
                 image[index++] = array[i];
             }
-            BufferedImage imageInfo = BMPDecoder.read(imageFile);
-            byte[] imageHeader = getHeaderFromBMPFile(file);
-//            byte[] image = ((DataBufferByte) imageInfo.getData().getDataBuffer()).getData();
-            int height = imageInfo.getHeight();
-            int width = imageInfo.getWidth();
 
             carriers.add(getSquaredMatrix(image, height, width, file, imageHeader));
         } catch (Exception e) {
@@ -95,48 +94,6 @@ public class BMPUtils {
         return new Carrier(squaredMatrix, path, imageHeader, width, height);
     }
 
-    /*private static void reverseGetSquaredMatrix(Carrier myCarrier, int height, int width){
-        /*
-        uint32_t x = 0;
-        for(uint32_t i = 0 ; i < n / 2 ; i++){
-            for(uint32_t j = 0 ; j < k  / 2; j++){
-                //printf("%d %d %d %d \n",ret[x][0],ret[x][1],ret[x][2],ret[x][3]);
-                uint32_t a = ret[x][0];
-                uint32_t b = ret[x][1];
-                uint32_t c = ret[x][2];
-                uint32_t d = ret[x][3];
-                uint32_t I = 2i;
-                uint32_t J = 2j;
-                //printf("{%d -> %d | %d -> %d} : %d %d %d %d \n",i,I,j,J,a,b,c,d);
-                mat[I][J] = a;
-                mat[I][J+1] = b;
-                mat[I+1][J] = c;
-                mat[I+1][J+1] = d;
-                x++;
-            }
-        }
-
-        int index = 0;
-        List<List<Byte>> myList = new ArrayList<>();
-        //si width = 300, height = 300, k= 4 => n 300*300/k = 22500
-        for(int i = 0; i < n/2 ; i += 2) {
-            for(int j = 0;j < k/2 ; j++){
-                Byte x = myCarrier.getImageBlockBytes().get(index).get(0);
-                Byte w = myCarrier.getImageBlockBytes().get(index).get(1);
-                Byte v = myCarrier.getImageBlockBytes().get(index).get(2);
-                Byte u = myCarrier.getImageBlockBytes().get(index).get(3);
-
-                myList.get(i*2).set(2*j,x);
-                myList.get(i*2).set(2*j + 1,w);
-                myList.get(i*2 + 1).set(2*j,v);
-                myList.get(i*2 + 1).set(2*j + 1,u);
-
-                index++;
-            }
-
-
-        }
-    }*/
     public static List<MathFunction> getFunctions(List<Byte> secretImage, int k){
         List<MathFunction> tmp = new ArrayList<>();
         for(int i = 0; i < secretImage.size(); ){
@@ -150,6 +107,15 @@ public class BMPUtils {
         }
         return tmp;
     }
+
+    /*
+     * Documentar codigo (que sea legible y entendible que hace cada funcion)
+     * NTH: Hacer mas performante el decrypt
+     * Look up table para el divide
+     * Ejecutable para correr en pampero
+     * Hacer README
+     * Imagenes de distintos tamaños
+     */
 
     public static void saveAll(List<Carrier> carriers, byte[] header) throws FileNotFoundException, IOException {
         for(Carrier carrier : carriers) {
