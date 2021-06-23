@@ -5,10 +5,7 @@ import models.*;
 import utils.BMPUtils;
 import utils.GaloisField;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Siscomo {
     public static void encrypt(Config config) throws Exception {
@@ -56,6 +53,7 @@ public class Siscomo {
 
     public static void decrypt(Config config) throws Exception {
         String recover = config.getRecoverFormDirectory();
+        Map<Byte,Byte> lookUpTable = GaloisField.getMappingInverse();
         int k = config.getK();
         List<Carrier> carriers = BMPUtils.getCarriers(recover, k); //podria
         byte[] secretImageHeader = carriers.get(0).getHeader();
@@ -75,7 +73,7 @@ public class Siscomo {
         }
         List<Byte[]> blockCoefficients = new ArrayList<>();
         for (List<Pair<Byte, Byte>> xAndFxPairsForBlock : xAndFxPairsForAllBlocks) {
-            Byte[] currentBlockCoefficients = getCoefficients(xAndFxPairsForBlock, k); //
+            Byte[] currentBlockCoefficients = getCoefficients(xAndFxPairsForBlock, k, lookUpTable); //
             blockCoefficients.add(currentBlockCoefficients);
         }
 
@@ -89,16 +87,16 @@ public class Siscomo {
         BMPUtils.saveBMPIMage(secretImage, config.getSecretImage().getPath());
     }
 
-    private static Byte[] getCoefficients(List<Pair<Byte, Byte>> xAndFxPairs, int k) {
+    private static Byte[] getCoefficients(List<Pair<Byte, Byte>> xAndFxPairs, int k, Map<Byte,Byte> lookUpTable) {
         int currentOrder = k;
         Byte[] coefficients = new Byte[k];
         int index = 0;
-        byte lastCoefficient = Lagrange.lagrangeInterpolation(xAndFxPairs, (byte)0);
+        byte lastCoefficient = Lagrange.lagrangeInterpolation(xAndFxPairs, (byte)0, lookUpTable);
         coefficients[index++] = lastCoefficient;
         xAndFxPairs = removeZeroElements(xAndFxPairs);
         while (--currentOrder > 0) {
-            xAndFxPairs = getprimeYValues(xAndFxPairs, lastCoefficient);
-            lastCoefficient = Lagrange.lagrangeInterpolation(xAndFxPairs, (byte)0);
+            xAndFxPairs = getprimeYValues(xAndFxPairs, lastCoefficient, lookUpTable);
+            lastCoefficient = Lagrange.lagrangeInterpolation(xAndFxPairs, (byte)0, lookUpTable);
             coefficients[index++] = lastCoefficient;
             xAndFxPairs.remove(xAndFxPairs.size()-1);
         }
@@ -106,9 +104,9 @@ public class Siscomo {
         return coefficients;
     }
 
-    private static byte getYPrime(Pair<Byte, Byte> xAndFxValues, byte s) {
+    private static byte getYPrime(Pair<Byte, Byte> xAndFxValues, byte s, Map<Byte,Byte> lookUpTable) {
         //return (byte)((xAndFxValues.getValue() - s) / xAndFxValues.getKey());
-        return GaloisField.divide(GaloisField.add(xAndFxValues.getValue(),s),xAndFxValues.getKey());
+        return GaloisField.divideWithMap(GaloisField.add(xAndFxValues.getValue(),s),xAndFxValues.getKey(), lookUpTable);
     }
 
     private static List<Pair<Byte, Byte>> removeZeroElements(List<Pair<Byte, Byte>> list) {
@@ -126,10 +124,10 @@ public class Siscomo {
         return result;
     }
 
-    private static List<Pair<Byte, Byte>> getprimeYValues(List<Pair<Byte, Byte>> list, byte lastCoefficient) {
+    private static List<Pair<Byte, Byte>> getprimeYValues(List<Pair<Byte, Byte>> list, byte lastCoefficient, Map<Byte,Byte> lookUpTable) {
         List<Pair<Byte, Byte>> result = new ArrayList<>();
         for (int i = 0; i < list.size(); i++){
-            result.add(new Pair<>(list.get(i).getKey(), getYPrime(list.get(i), lastCoefficient)));
+            result.add(new Pair<>(list.get(i).getKey(), getYPrime(list.get(i), lastCoefficient, lookUpTable)));
         }
         return result;
     }

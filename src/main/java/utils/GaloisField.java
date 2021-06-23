@@ -140,6 +140,20 @@ public class GaloisField {
         return x;
     }
 
+    public static byte divideWithMap(byte b1,byte b2,Map<Byte,Byte> map){
+        if(b1 == 0 || b2 == 0)
+            return 0;
+        return moduleReducer(product(Byte.toUnsignedInt(b1),Byte.toUnsignedInt(map.get(b2))),355);
+    }
+
+    public static Map<Byte,Byte> getMappingInverse(){
+        Map<Byte,Byte> map = new HashMap<>();
+        for(int i = 0; i <= 255 ; i++){
+            map.put((byte) i, inverse((byte) i));
+        }
+        return map;
+    }
+
     public static void main(String[] args) {
         byte num1 = (byte)200, num2 = 14;
         byte tmp = divide(num1,num2);
