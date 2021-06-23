@@ -155,7 +155,7 @@ public class BMPUtils {
         for(Carrier carrier : carriers) {
             byte[] carrierByteArray =  BMPUtils.reverseCarrier(carrier, header);
             System.out.println(carrier.getFilePath());
-            File outputFile = new File(carrier.getFilePath().split("\\.")[0] + "_final.bmp");
+            File outputFile = new File(carrier.getFilePath().split("\\.")[0]);
             try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
                 outputStream.write(carrierByteArray);
             }
