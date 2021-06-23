@@ -35,7 +35,17 @@ public class Carrier {
         fxAsBitArray[index++] = vAsBitArray[6];
         fxAsBitArray[index++] = vAsBitArray[7];
         fxAsBitArray[index++] = uAsBitArray[6];
-        fxAsBitArray[index] = uAsBitArray[7];
+        fxAsBitArray[index]   = uAsBitArray[7];
+
+        /*fxAsBitArray[5] = wAsBitArray[7];
+        fxAsBitArray[6] = wAsBitArray[6];
+        fxAsBitArray[7] = wAsBitArray[5];
+        fxAsBitArray[2] = vAsBitArray[7];
+        fxAsBitArray[3] = vAsBitArray[6];
+        fxAsBitArray[4] = vAsBitArray[5];
+        fxAsBitArray[0] = uAsBitArray[7];
+        fxAsBitArray[1] = uAsBitArray[6];*/
+
 
         if(getParityBit(fxAsBitArray) != uAsBitArray[5])
             throw new Exception("Bit parity check");

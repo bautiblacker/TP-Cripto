@@ -16,22 +16,22 @@ public class Lagrange {
 
             for (int j=0;j<n;j++) {
                 if (j!=i){
+
                     //term = (byte) (term*(xToEvaluate - valuePairs.get(j).getKey())/(valuePairs.get(i).getKey() - valuePairs.get(j).getKey()));
-                    //term = GaloisField.moduleReducer();
                     byte aux1 = GaloisField.add(valuePairs.get(i).getKey(),valuePairs.get(j).getKey());
                     byte aux2 = GaloisField.add(xToEvaluate,valuePairs.get(j).getKey());
                     byte prod = GaloisField.moduleReducer(GaloisField.product(Byte.toUnsignedInt(term),Byte.toUnsignedInt(aux2), 355), 355);
                     term = GaloisField.divide(prod,aux1);
                 }
             }
-
             // Add current term to result
-            result = GaloisField.add(result,term);
+            result = GaloisField.moduleReducer(Byte.toUnsignedInt(GaloisField.add(result,term)),355);
             //result += term;
         }
 
-        return GaloisField.moduleReducer(Byte.toUnsignedInt(result),355);
+        return result;
     }
+
 
 
 }

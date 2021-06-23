@@ -126,13 +126,13 @@ public class GaloisField {
 
 
     public static byte divide(byte b1, byte b2){
-        if(b1 == 0)
+        if(b1 == 0 || b2 == 0)
             return 0;
         return moduleReducer(product(Byte.toUnsignedInt(b1),Byte.toUnsignedInt(inverse(b2))),355);
     }
 
     public static byte inverse(byte x){
-        for(int i = 0; i < 255 ; i++){
+        for(int i = 0; i <= 255 ; i++){
             if(moduleReducer(product(i,Byte.toUnsignedInt(x)),355) == 1)
                 return (byte) i;
 

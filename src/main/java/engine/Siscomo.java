@@ -57,7 +57,7 @@ public class Siscomo {
     public static void decrypt(Config config) throws Exception {
         String recover = config.getRecoverFormDirectory();
         int k = config.getK();
-        List<Carrier> carriers = BMPUtils.getCarriers(recover, k);
+        List<Carrier> carriers = BMPUtils.getCarriers(recover, k); //podria
         byte[] secretImageHeader = carriers.get(0).getHeader();
 
         List<List<Pair<Byte, Byte>>> xAndFxPairsForAllBlocks = new ArrayList<>();
@@ -74,9 +74,13 @@ public class Siscomo {
             xAndFxPairsForAllBlocks.add(xAndFxPairForBlock);
         }
         List<Byte[]> blockCoefficients = new ArrayList<>();
-        for (List xAndFxPairsForBlock : xAndFxPairsForAllBlocks) {
-            Byte[] currentBlockCoefficients = getCoefficients(xAndFxPairsForBlock, k);
+        int counter = 0;
+        for (List<Pair<Byte, Byte>> xAndFxPairsForBlock : xAndFxPairsForAllBlocks) {
+            if(counter == 233)
+                System.out.println("aaa");
+            Byte[] currentBlockCoefficients = getCoefficients(xAndFxPairsForBlock, k); //
             blockCoefficients.add(currentBlockCoefficients);
+            counter++;
         }
 
         byte[] secretImageData = new byte[blockCoefficients.size() * blockCoefficients.get(0).length];
