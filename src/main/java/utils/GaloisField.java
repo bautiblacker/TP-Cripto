@@ -82,7 +82,7 @@ public class GaloisField {
         int aGrade = getGradeFromBinaryString(Binary.getBinary(a,15));
         int bGrade = getGradeFromBinaryString(Binary.getBinary(b,15));
         if (aGrade == -1 || bGrade == -1){
-            System.out.println("Error perri");
+            System.out.println("Polynomial degree error. Exiting.");
             System.exit(1);
         }
         return aGrade - bGrade;
@@ -152,13 +152,6 @@ public class GaloisField {
             map.put((byte) i, inverse((byte) i));
         }
         return map;
-    }
-
-    public static void main(String[] args) {
-        byte num1 = (byte)200, num2 = 14;
-        byte tmp = divide(num1,num2);
-        System.out.println(Byte.toUnsignedInt(tmp));
-        System.out.println(Byte.toUnsignedInt(inverse(num2)));
     }
 
 }

@@ -22,7 +22,7 @@ public class Config {
         try {
             parse(args);
         } catch (FileNotFoundException e) {
-            System.out.println("unable to locate file. Error " + e);
+            System.out.println("Unable to locate one of the provided files. Make sure that the files exist.");
             System.exit(1);
         } catch (NumberFormatException e) {
             System.out.println("The value provided for K is invalid. Please try again.");
@@ -45,12 +45,12 @@ public class Config {
      */
     private void parse(String[] args) throws FileNotFoundException, NumberFormatException, ArrayIndexOutOfBoundsException {
         if(args[0].equals("d")) {
-            System.out.println("Hiding secret image...");
+//            System.out.println("Hiding secret image...");
             this.d = true;
             this.hideInDirectory = args[3];
             this.secretImage = FileUtils.parseFile(args[1]);
         } else {
-            System.out.println("Recovering secret image...");
+//            System.out.println("Recovering secret image...");
             this.r = true;
             this.recoverFormDirectory = args[3];
             this.secretImage = new File(args[1]);

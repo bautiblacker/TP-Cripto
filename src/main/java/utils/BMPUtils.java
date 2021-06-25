@@ -58,8 +58,8 @@ public class BMPUtils {
         byte[] buffer = new byte[1078];
         InputStream is = new FileInputStream(fileName);
         if (is.read(buffer) != buffer.length) {
-            // do something
-            System.out.println("getHeaderFromBMPFile() printaloo");
+            System.out.println("Invalid header on BMP file:" + fileName + ". Exiting.");
+            System.exit(1);
         }
         is.close();
         return buffer;
